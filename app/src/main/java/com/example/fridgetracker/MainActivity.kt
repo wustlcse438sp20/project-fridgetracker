@@ -1,10 +1,13 @@
 package com.example.fridgetracker
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.example.fridgetracker.activities.ContentActivity
+import com.example.fridgetracker.fragments.FridgeFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -12,6 +15,12 @@ class MainActivity : AppCompatActivity() {
  
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // wah uncomment these lines to test FridgeFragment
+//        setContentView(R.layout.activity_main)
+//        val intent = Intent(this, ContentActivity::class.java)
+//        startActivity(intent)
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
