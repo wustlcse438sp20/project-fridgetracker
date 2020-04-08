@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "118968599529",
+    "firebase_url": "https://fridgetracker-bfee0.firebaseio.com",
+    "project_id": "fridgetracker-bfee0",
+    "storage_bucket": "fridgetracker-bfee0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118968599529:android:4ac80726f552295c5d0178",
+        "android_client_info": {
+          "package_name": "com.example.fridgetracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118968599529-0j6vsdfq74m167grmhi2tr3vokh17qvm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fridgetracker",
+            "certificate_hash": "fe364a31d376875e593478484a395ea6e052f0e8"
+          }
+        },
+        {
+          "client_id": "118968599529-nfkbulkq0u0gifljjlo6n6v0513cudee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCx47Z4Zxue309IYbd13UhgiNcbjWM9TQc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118968599529-nfkbulkq0u0gifljjlo6n6v0513cudee.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
