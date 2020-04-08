@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.tabs_holder.*
 
 
 class ContentActivity : AppCompatActivity() {
-
+    private var id:String = ""
 //    lateinit var viewModel: MusicViewModel
 //    var musicList: ArrayList<Music> = ArrayList()
 
@@ -26,6 +26,22 @@ class ContentActivity : AppCompatActivity() {
         viewpager_content.adapter = fragmentAdapter
 
         tabs_content.setupWithViewPager(viewpager_content)
+    }
+    override fun onStart() {
+        super.onStart()
+        //id = intent.getStringExtra("id")
+        //println(id)
+
+//        val fragment = FridgeFragment()
+//
+//        //pass array of rolls to the fragments
+//        var bundle = Bundle()
+//        bundle.putString("user", id)
+//        fragment.arguments = bundle
+
+//        val transaction = supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.frag_container, fragment)
+//        transaction.commit()
     }
 
     class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
