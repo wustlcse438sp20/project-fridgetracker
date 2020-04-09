@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fridgetracker.R
+import com.example.fridgetracker.data.Food
 
 // taken from PlaylistAdapter
 class FridgeViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
@@ -22,10 +23,10 @@ class FridgeViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         fridgeItem = itemView.findViewById(R.id.fridgeItem)
     }
 
-    fun bind(item: String/*TrackPlaylist*/) {
+    fun bind(item: Food) {
 
-        itemName.text = item
-        //itemDate.text = playlist.playlistDesc
+        itemName.text = item.foodName
+        itemDate.text = item.foodDate
 
         fridgeItem.setOnClickListener(){
 //            val intent= Intent(context, TracksOfPlaylist::class.java)
@@ -38,9 +39,9 @@ class FridgeViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 }
 
 //create the listener for the recycler view
-class FridgeAdapter(private val list: ArrayList</*TrackPlaylist*/String>?)
+class FridgeAdapter(private val list: ArrayList<Food>?)
     : RecyclerView.Adapter<FridgeViewHolder>() {
-    private var fridgeItemList : ArrayList</*TrackPlaylist*/String>? = list
+    private var fridgeItemList : ArrayList<Food>? = list
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FridgeViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return FridgeViewHolder(inflater, parent)
@@ -48,7 +49,7 @@ class FridgeAdapter(private val list: ArrayList</*TrackPlaylist*/String>?)
 
     //bind the object
     override fun onBindViewHolder(holder: FridgeViewHolder, position: Int) {
-        val event: String/*TrackPlaylist*/ = fridgeItemList!!.get(position)
+        val event: Food = fridgeItemList!!.get(position)
         holder.bind(event)
     }
 

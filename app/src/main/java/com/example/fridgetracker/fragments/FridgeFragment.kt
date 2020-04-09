@@ -46,7 +46,9 @@ class FridgeFragment : Fragment() {
         currentUser = auth.currentUser?.email.toString()
 
         // adapter stuff
-        val testList = arrayListOf("testName")
+        val testFood = Food("testName","testDate","testQuantity","testNote")
+        val testList = arrayListOf(testFood)
+        //val testList = arrayListOf("testName")
         var adapter = FridgeAdapter(testList)
         fridgeItemRecycler.adapter = adapter
         fridgeItemRecycler.layoutManager = LinearLayoutManager(this.context)
