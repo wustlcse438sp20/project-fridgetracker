@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.enter_food_information.view.*
 import kotlinx.android.synthetic.main.fridge_tab.*
 
 
-
+//
 // taken from PlaylistFragment
 class FridgeFragment : Fragment() {
     lateinit var database: FirebaseFirestore
