@@ -57,6 +57,15 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
     kapt 'android.arch.persistence.room:compiler:1.1.1'
 
+    //retrofit for REST
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+
+    //Moshi for type conversion
+    implementation 'com.squareup.retrofit2:converter-moshi:2.6.0'
+
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
