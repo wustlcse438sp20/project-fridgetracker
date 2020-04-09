@@ -14,11 +14,15 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fridgetracker.R
 import android.content.Intent
+import com.example.fridgetracker.activities.ContentActivity
 import com.example.fridgetracker.adapters.FridgeAdapter
 import com.example.fridgetracker.data.Food
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.enter_food_information.*
 import kotlinx.android.synthetic.main.enter_food_information.view.*
 import kotlinx.android.synthetic.main.fridge_tab.*
@@ -30,6 +34,9 @@ class FridgeFragment : Fragment() {
     lateinit var database: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private var currentUser: String = ""
+    lateinit var query: Query
+
+    lateinit var adapter: FridgeAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fridge_tab, container, false)
@@ -39,19 +46,37 @@ class FridgeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         database = FirebaseFirestore.getInstance()
+        currentUser = auth.currentUser?.email.toString()
+
+        //query = database.collection(currentUser)
+        query =database.collection("users").document(currentUser).collection("foods")
+        adapter = object : FridgeAdapter(query,this@FridgeFragment) {
+            override fun onDataChanged() {
+                // Show/hide content if the query returns empty.
+                if (itemCount == 0) {
+                    fridgeItemRecycler.visibility = View.GONE
+                } else {
+                    fridgeItemRecycler.visibility = View.VISIBLE
+                    fridgeItemRecycler.layoutManager = LinearLayoutManager(getActivity())
+                    fridgeItemRecycler.adapter = adapter
+                }
+            }
+        }
+
+
     }
 
     override fun onStart() {
         super.onStart()
-        currentUser = auth.currentUser?.email.toString()
 
         // adapter stuff
-        val testList = arrayListOf("testName")
-        var adapter = FridgeAdapter(testList)
-        fridgeItemRecycler.adapter = adapter
-        fridgeItemRecycler.layoutManager = LinearLayoutManager(this.context)
-        fridgeItemRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+//        val testList = arrayListOf("testName")
+//        var adapter = FridgeAdapter(testList)
+//        fridgeItemRecycler.adapter = adapter
+//        fridgeItemRecycler.layoutManager = LinearLayoutManager(this.context)
+//        fridgeItemRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         // viewmodel stuff here?
+        adapter.startListening()
 
         addFridgeItemButton.setOnClickListener {
             dialogView()
@@ -87,18 +112,10 @@ class FridgeFragment : Fragment() {
             val food = Food(foodName,foodDate,foodQuantity,foodNote)
             // If the string is empty, we do not want to accept that as an input
             if(foodName != "" && foodDate != "" && foodQuantity != "" && foodNote != ""){
-//                val p = TrackPlaylist(
-//                    playlistNameEntered,
-//                    playlistDescEntered,
-//                    playlistRatingEntered.toIntOrNull()!!,
-//                    playlistGenreEntered
-//                )
-//                viewModel!!.insertPlayList(p)
                 //store food into user's food stuff
-
                 val userFoods = database.collection("users").document(currentUser)
                 userFoods.update("foods", FieldValue.arrayUnion(food))
-//
+
                 mAlertDialog.dismiss()
             } else {
                 val myToast = Toast.makeText(this.getActivity(), "Please enter valid values", Toast.LENGTH_SHORT)
