@@ -53,11 +53,11 @@ class RecipeSearchFragment() : Fragment() {
             adapter.notifyDataSetChanged()
         })
 
-        //search bar: search by
+        //search bar: search by name
         searchBox.setOnEditorActionListener() { v, actionId, event ->
             val input: String = searchBox.text.toString()
-            viewModel!!.getRandomRecipe()
-
+            viewModel!!.getByName(input)
+            println("inside editoractionlistener")
             viewModel!!.recipeList.observe(viewLifecycleOwner, Observer { recipes ->
                 // Update the cached copy of the words in the adapter.
                 recipeList.clear()

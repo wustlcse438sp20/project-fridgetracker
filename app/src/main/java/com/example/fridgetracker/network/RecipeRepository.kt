@@ -33,6 +33,22 @@ class RecipeRepository {
         }
     }
 
+    fun getByName(input: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.getByName(input)
+
+            withContext(Dispatchers.Main) {
+                try{
+                    if(response.isSuccessful) {
+                        resBody.value = response.body()?.meals
+                    }
+                } catch (e: HttpException) {
+                    println("Http error")
+                }
+            }
+        }
+    }
+
 //    fun getTrackInfo(input:String) {
 //        CoroutineScope(Dispatchers.IO).launch {
 //            val response = service.getTrackInfo(input)

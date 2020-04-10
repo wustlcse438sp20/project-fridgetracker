@@ -11,6 +11,16 @@ interface RecipeInterface {
     @GET("api/json/v1/1/random.php")
     suspend fun getRandomRecipe() : Response<mealsWrapper>
 
+    @GET("api/json/v1/1/search.php")
+    suspend fun getByName(@Query("s") q : String) : Response<mealsWrapper>
+
+//    @GET("api/json/v1/1/filter.php")
+//    suspend fun getByIngredient(@Query("i") q : String) : Response<mealsWrapper>
+
+    // need to make new data class for this one?
+//    @GET("api/json/v1/1/filter.php")
+//    suspend fun getByIngredient(@Query("i") q : String) : Response<mealsWrapper>
+
 //    @GET
 //    suspend fun getTrackInfo(@Url url: String) : Response<Recipe>
 //

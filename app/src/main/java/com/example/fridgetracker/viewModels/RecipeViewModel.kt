@@ -20,6 +20,11 @@ class RecipeViewModel (application: Application): AndroidViewModel(application) 
         recipeList = recipeRepository.resBody
     }
 
+    fun getByName(input : String) {
+        recipeRepository.getByName(input)
+        recipeList = recipeRepository.resBody
+    }
+
 //    fun getTopRanking() {
 //        musicRepository.getTopRanking()
 //        musicList = musicRepository.resBody
