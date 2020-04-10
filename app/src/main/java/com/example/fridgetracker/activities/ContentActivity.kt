@@ -59,6 +59,8 @@ class ContentActivity : AppCompatActivity() {
                 1 -> { FreezerFragment() }
                 2 -> { PantryFragment() }
                 3 -> { RecipeSearchFragment() } // recipe search tab
+//                4 -> { RecipeSaveFragment() } // recipe_save_tab.xml is implemented
+//                5 -> { ReceiptsFragment() } // receipts_tab.xml is implemented
                 else -> PantryFragment()
             }
         }
