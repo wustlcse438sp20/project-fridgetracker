@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.fridgetracker.R
+import com.example.fridgetracker.fragments.FreezerFragment
 import com.example.fridgetracker.fragments.FridgeFragment
+import com.example.fridgetracker.fragments.PantryFragment
 import kotlinx.android.synthetic.main.tabs_holder.*
 
 
@@ -53,8 +55,8 @@ class ContentActivity : AppCompatActivity() {
         override fun getItem(position: Int) : Fragment {
             return when (position) {
                 0 -> { FridgeFragment() } // wah temporary test
-                1 -> { FridgeFragment() }
-                else -> FridgeFragment()
+                1 -> { FreezerFragment() }
+                else -> PantryFragment()
             }
         }
 

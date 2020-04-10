@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "Pantry"
+        android:textSize="26dp"
+        android:id="@+id/fridgeTitle"
+        android:layout_marginTop="38dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/email"
+        />
+
+    <LinearLayout
+        android:id="@+id/fridgeHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="43dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/fridgeTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+        <TextView
+            android:id="@+id/fridgeItemHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".4"
+            android:text="Item"
+            android:gravity="center"
+            android:textSize="28sp" />
+        <TextView
+            android:id="@+id/fridgeDateHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight=".6"
+            android:text="Expiration Date"
+            android:textSize="28sp" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fridgeItemRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="325dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fridgeHeader" />
+    <Button
+        android:id="@+id/addFridgeItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Item"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="100dp"
+        app:layout_constraintTop_toBottomOf="@+id/fridgeItemRecycler"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+    <Button
+        android:id="@+id/deleteFridgeItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Item"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="100dp"
+        app:layout_constraintTop_toBottomOf="@+id/fridgeItemRecycler"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
