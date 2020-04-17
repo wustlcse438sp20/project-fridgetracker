@@ -9,18 +9,17 @@ import com.example.fridgetracker.R
 import com.example.fridgetracker.fragments.FreezerFragment
 import com.example.fridgetracker.fragments.FridgeFragment
 import com.example.fridgetracker.fragments.PantryFragment
-import com.example.fridgetracker.fragments.RecipeSearchFragment
-import kotlinx.android.synthetic.main.tabs_holder.*
+import kotlinx.android.synthetic.main.content_tabs_holder.*
 
 
-class ContentActivity : AppCompatActivity() {
+class InventoryActivity : AppCompatActivity() {
     private var id:String = ""
 //    lateinit var viewModel: MusicViewModel
 //    var musicList: ArrayList<Music> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.tabs_holder)
+        setContentView(R.layout.content_tabs_holder)
 
         val fragmentAdapter =
             MyPagerAdapter(
@@ -50,17 +49,13 @@ class ContentActivity : AppCompatActivity() {
     class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         override fun getCount() : Int {
-            return 4
+            return 3
         }
 
         override fun getItem(position: Int) : Fragment {
             return when (position) {
                 0 -> { FridgeFragment() }
                 1 -> { FreezerFragment() }
-                2 -> { PantryFragment() }
-                3 -> { RecipeSearchFragment() } // recipe search tab
-//                4 -> { RecipeSaveFragment() } // recipe_save_tab.xml is implemented
-//                5 -> { ReceiptsFragment() } // receipts_tab.xml is implemented
                 else -> PantryFragment()
             }
         }
@@ -69,8 +64,6 @@ class ContentActivity : AppCompatActivity() {
             return when (position) {
                 0 -> "Fridge"
                 1 -> "Freezer"
-                2 -> "Pantry"
-                3 -> "Search Recipes"
                 else -> "Pantry"
             }
         }

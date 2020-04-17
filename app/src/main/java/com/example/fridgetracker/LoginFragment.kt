@@ -11,7 +11,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fridgetracker.R
-import com.example.fridgetracker.activities.ContentActivity
+import com.example.fridgetracker.activities.InventoryActivity
+import com.example.fridgetracker.activities.MenuActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -51,7 +52,7 @@ class LoginFragment() : Fragment() {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success")
                             val user = auth.currentUser
-                            var intent = Intent(getActivity(), ContentActivity::class.java)
+                            var intent = Intent(getActivity(), MenuActivity::class.java)
                             intent.putExtra("id", auth?.currentUser?.displayName)
                             startActivity(intent)
                         } else {

@@ -1,30 +1,22 @@
 package com.example.fridgetracker.fragments
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fridgetracker.R
-import android.content.Intent
 import androidx.lifecycle.Observer
-import com.example.fridgetracker.activities.ContentActivity
+import com.example.fridgetracker.activities.MenuActivity
 import com.example.fridgetracker.adapters.FridgeAdapter
 import com.example.fridgetracker.data.Food
 import com.example.fridgetracker.viewModel.FoodViewModel
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.enter_food_information.*
 import kotlinx.android.synthetic.main.enter_food_information.view.*
 import kotlinx.android.synthetic.main.fridge_tab.*
@@ -115,6 +107,12 @@ class FridgeFragment : Fragment() {
         addFridgeItemButton.setOnClickListener {
             dialogView()
         }
+
+        menuButton.setOnClickListener {
+            var main = Intent(getActivity(), MenuActivity::class.java)
+            //main.putExtra("id", 1)
+            startActivity(main)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -165,5 +163,6 @@ class FridgeFragment : Fragment() {
 //
 //
 //    }
+
 
 }

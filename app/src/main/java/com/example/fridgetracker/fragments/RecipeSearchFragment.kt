@@ -1,5 +1,6 @@
 package com.example.fridgetracker.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.fridgetracker.R
+import com.example.fridgetracker.activities.MenuActivity
 import com.example.fridgetracker.adapters.RecipeListAdapter
 import com.example.fridgetracker.data.Recipe
 import com.example.fridgetracker.viewModels.RecipeViewModel
 import kotlinx.android.synthetic.main.recipe_search_tab.*
+import kotlinx.android.synthetic.main.recipe_search_tab.menuButton
 
 
 class RecipeSearchFragment() : Fragment() {
@@ -57,7 +60,6 @@ class RecipeSearchFragment() : Fragment() {
         searchBox.setOnEditorActionListener() { v, actionId, event ->
             val input: String = searchBox.text.toString()
             viewModel!!.getByName(input)
-            println("inside editoractionlistener")
             viewModel!!.recipeList.observe(viewLifecycleOwner, Observer { recipes ->
                 // Update the cached copy of the words in the adapter.
                 recipeList.clear()
@@ -66,5 +68,11 @@ class RecipeSearchFragment() : Fragment() {
             })
             true
         }
+        menuButton.setOnClickListener {
+            var main = Intent(getActivity(), MenuActivity::class.java)
+            //main.putExtra("id", 1)
+            startActivity(main)
+        }
     }
+
 }

@@ -20,7 +20,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ContentActivity"
+            android:name=".activities.InventoryActivity"
+            ></activity>
+        <activity
+            android:name=".activities.MenuActivity"
+            ></activity>
+        <activity
+            android:name=".activities.RecipeActivity"
             ></activity>
     </application>
 
