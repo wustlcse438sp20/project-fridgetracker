@@ -24,6 +24,11 @@ class MenuActivity : AppCompatActivity() {
             var intent = Intent(this, ReceiptsActivity::class.java)
             startActivity(intent)
         }
+        receiptsButton.setOnClickListener {
+            var intent = Intent(this, CameraActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     override fun onStart() {
