@@ -76,7 +76,7 @@ class FridgeViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     fun bind(food: Food) {
 
         itemName.text = food.foodName
-        itemDate.text = food.foodDate
+        itemDate.text = food.foodDate.toString()
         //itemDate.text = playlist.playlistDesc
 
         fridgeItem.setOnClickListener(){

@@ -96,7 +96,7 @@ class PantryFragment : Fragment() {
 
             //store food into Food
             // If the string is empty, we do not want to accept that as an input
-            if(foodName != "" && foodDate != "" && foodQuantity.toString() != "" && foodNote != ""){
+            if(foodName != "" && foodDate.toString() != "" && foodQuantity.toString() != "" && foodNote != ""){
                 val food = Food("pantry",foodName,foodDate,foodQuantity,foodNote)
                 viewModel!!.insertFood(food)
                 mAlertDialog.dismiss()

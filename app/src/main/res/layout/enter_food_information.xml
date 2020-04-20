@@ -13,7 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-    <EditText
+<!--    <DatePicker-->
+<!--        android:id="@+id/foodDateEntered"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:datePickerMode="spinner"-->
+<!--        android:calendarViewShown="false"/>-->
+        <EditText
         android:id="@+id/foodDateEntered"
         android:hint="Expiration Date"
         android:inputType="text"

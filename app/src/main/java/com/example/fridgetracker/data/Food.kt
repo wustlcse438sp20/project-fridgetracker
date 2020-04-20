@@ -1,6 +1,8 @@
 package com.example.fridgetracker.data
 
+import android.widget.DatePicker
 import androidx.room.*
+import java.util.*
 
 @Entity(tableName = "foodItems")
 data class Food(
@@ -19,3 +21,14 @@ data class Food(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 }
+//class Converters {
+//    @TypeConverter
+//    fun fromTimestamp(value: Long?): Date? {
+//        return value?.let { Date(it) }
+//    }
+//
+//    @TypeConverter
+//    fun dateToTimestamp(date: Date?): Long? {
+//        return date?.time?.toLong()
+//    }
+//}
