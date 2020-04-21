@@ -7,19 +7,18 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 // wah if I change the database of any kind, try changing the version number to reset the database; fallbackToDestructiveMigration
-@Database(entities = arrayOf(Food::class), version = 16)
-//@TypeConverters(Converters::class)
-public abstract class FoodRoomDatabase : RoomDatabase() {
+@Database(entities = arrayOf(SavedRecipe::class), version = 9)
+public abstract class RecipeRoomDatabase : RoomDatabase() {
 
-    abstract fun foodDao(): FoodDao
+    abstract fun recipeDao(): RecipeDao
 
     //singleton pattern
     companion object {
 
         @Volatile
-        private var INSTANCE: FoodRoomDatabase? = null
+        private var INSTANCE: RecipeRoomDatabase? = null
 
-        fun getDatabase(context: Context) : FoodRoomDatabase {
+        fun getDatabase(context: Context) : RecipeRoomDatabase {
             val temp = INSTANCE
             if(temp != null) {
                 return temp
@@ -27,7 +26,7 @@ public abstract class FoodRoomDatabase : RoomDatabase() {
             synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    FoodRoomDatabase::class.java,
+                    RecipeRoomDatabase::class.java,
                     "playlist_database"
                 ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance

@@ -6,12 +6,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.fridgetracker.R
+import com.example.fridgetracker.fragments.RecipeSaveFragment
 import com.example.fridgetracker.fragments.RecipeSearchFragment
 import kotlinx.android.synthetic.main.content_tabs_holder.*
 
 
 class RecipeActivity : AppCompatActivity() {
-    private var id:String = ""
+//    private var id:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +39,7 @@ class RecipeActivity : AppCompatActivity() {
         override fun getItem(position: Int) : Fragment {
             return when (position) {
                 0 -> { RecipeSearchFragment() } // recipe search tab
-//                1 -> { RecipeSaveFragment() } // recipe_save_tab.xml is implemented
+                1 -> { RecipeSaveFragment() } // recipe_save_tab.xml is implemented
                 else -> RecipeSearchFragment()
             }
         }

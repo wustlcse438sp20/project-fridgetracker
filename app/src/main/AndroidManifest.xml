@@ -38,6 +38,9 @@
         <activity
             android:name=".activities.CameraActivity"
             ></activity>
+        <activity
+            android:name=".activities.RecipeInfo"
+            ></activity>
     </application>
 
 </manifest>
