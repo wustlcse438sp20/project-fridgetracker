@@ -1,12 +1,12 @@
 package com.example.fridgetracker.data
 
+import androidx.room.Entity
 import java.io.Serializable
+import androidx.room.*
 
 data class Recipe(
     val idMeal: String,
     val strMeal: String, // name
-//    val strCategory: String,
-//    val strArea: String,
     val strInstructions: String,
     val strMealThumb: String // image url
 //    val strIngredient1: String,
@@ -16,9 +16,27 @@ data class Recipe(
 
 ): Serializable
 
-data class mealsWrapper(
+data class MealsWrapper(
     val meals: List<Recipe>
 )
+
+@Entity(tableName = "savedRecipes")
+data class SavedRecipe(
+    @ColumnInfo(name = "idMeal")
+    val idMeal: String,
+    @ColumnInfo(name = "strMeal")
+    val strMeal: String,
+    @ColumnInfo(name = "strInstructions")
+    val strInstructions: String
+//    @ColumnInfo(name = "foodQuantity")
+//    val foodQuantity: Int,
+//    @ColumnInfo(name = "foodNote")
+//    val foodNote: String
+)
+{
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
+}
 
 // this class may not be necessary
 data class RecipeImage(

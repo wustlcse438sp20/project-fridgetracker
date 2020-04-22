@@ -7,14 +7,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import retrofit2.Response
 
 
-class RecipeRepository {
+class RecipeRetrofitRepository {
     val service = ApiClient.makeRetrofitService()
 
     var resBody: MutableLiveData<List<Recipe>> = MutableLiveData()
-    var resBod: MutableLiveData<Recipe> = MutableLiveData()
+    var resBodySingleItem: MutableLiveData<Recipe> = MutableLiveData()
 
     fun getRandomRecipe() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -49,22 +48,22 @@ class RecipeRepository {
         }
     }
 
-//    fun getTrackInfo(input:String) {
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val response = service.getTrackInfo(input)
-//
-//            withContext(Dispatchers.Main) {
-//                try{
-//                    if(response.isSuccessful) {
-//                        resBod.value = response.body()
-//                        println(resBod.value)
-//                    }
-//                } catch (e: HttpException) {
-//                    println("Http error")
-//                }
-//            }
-//        }
-//    }
+    fun getRecipeInfo(input:String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.getRecipeInfo(input)
+
+            withContext(Dispatchers.Main) {
+                try{
+                    if(response.isSuccessful) {
+                        resBodySingleItem.value = response.body()?.meals!![0]
+                        println("response successful " + resBody.value)
+                    }
+                } catch (e: HttpException) {
+                    println("Http error")
+                }
+            }
+        }
+    }
 //
 //    fun getTopRanking() {
 //        CoroutineScope(Dispatchers.IO).launch {

@@ -1,11 +1,14 @@
 package com.example.fridgetracker.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fridgetracker.R
+import com.example.fridgetracker.activities.RecipeInfo
+//import com.example.fridgetracker.activities.RecipeInfo
 import com.example.fridgetracker.data.Recipe
 import com.squareup.picasso.Picasso
 
@@ -29,10 +32,10 @@ class RecipeViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         Picasso.get().load(recipe.strMealThumb).into(recipeImage)
         //onClickList on picture
         recipeImage.setOnClickListener{
-//            val intent= Intent(context,TrackInfo::class.java)
-//            intent.putExtra("id", Integer.parseInt(recipe.id))
-//            context.startActivity(intent)
-
+            val intent= Intent(context, RecipeInfo::class.java)
+            intent.putExtra("idMeal", Integer.parseInt(recipe.idMeal))
+            intent.putExtra("comingFrom", "SearchRecipe")
+            context.startActivity(intent)
         }
 
     }
