@@ -2,17 +2,19 @@ package com.example.fridgetracker.fragments
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fridgetracker.R
-import androidx.lifecycle.Observer
 import com.example.fridgetracker.activities.MenuActivity
 import com.example.fridgetracker.adapters.FridgeAdapter
 import com.example.fridgetracker.data.Food
@@ -20,6 +22,13 @@ import com.example.fridgetracker.viewModel.FoodViewModel
 import kotlinx.android.synthetic.main.enter_food_information.*
 import kotlinx.android.synthetic.main.enter_food_information.view.*
 import kotlinx.android.synthetic.main.fridge_tab.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.format.ResolverStyle
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 //
@@ -38,9 +47,12 @@ class FridgeFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart()
         var adapter = FridgeAdapter(foodItemList)
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+
         fridgeItemRecycler.adapter = adapter
         fridgeItemRecycler.layoutManager = LinearLayoutManager(activity)
         fridgeItemRecycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
@@ -51,7 +63,8 @@ class FridgeFragment : Fragment() {
             // Update the cached copy of the words in the adapter.
             foodItemList.clear()
             foodItemList.addAll(foods)
-            foodItemList.sortBy { it.foodDate }
+
+            foodItemList.sortBy { LocalDate.parse(it.foodDate, dateTimeFormatter) }
             adapter.notifyDataSetChanged()
             fridgeItemRecycler!!.adapter?.notifyDataSetChanged()
         })
@@ -71,6 +84,7 @@ class FridgeFragment : Fragment() {
     /**
      * Displays the dialog box asking the user for the item's info
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun dialogView() {
         // Opens the dialog view asking the user for
         //println("fragment" + id)
@@ -87,10 +101,24 @@ class FridgeFragment : Fragment() {
             val foodQuantity = dialogView.foodQuantityEntered.text.toString().toInt()
             val foodNote = dialogView.foodNoteEntered.text.toString()
 
+            val dateTimeFormatter =
+                DateTimeFormatter
+                    .ofPattern("MM/dd/yyyy", Locale.US)
+                    .withResolverStyle(ResolverStyle.STRICT)
+            try {
+                val date: LocalDateTime = LocalDateTime.parse(foodDate, dateTimeFormatter)
+                System.out.println(date)
+            } catch (e: DateTimeParseException) {
+                // Throw invalid date message
+                println("Exception was thrown")
+                val myToast = Toast.makeText(this.getActivity(), "Please enter date with valid format", Toast.LENGTH_SHORT)
+                myToast.show()
+            }
             //store food into Food
             // If the string is empty, we do not want to accept that as an input
-            if(foodName != "" && foodDate != "" && foodQuantity.toString() != "" && foodNote != ""){
+            if(foodName != "" && foodDate != "" && foodQuantity.toString() != "" && foodNote != "" ){
                 //store food into user's food stuff
+
                 val food = Food("fridge",foodName,foodDate,foodQuantity,foodNote)
                 viewModel!!.insertFood(food)
                 mAlertDialog.dismiss()
