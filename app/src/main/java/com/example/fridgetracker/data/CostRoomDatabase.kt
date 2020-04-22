@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 // wah if I change the database of any kind, try changing the version number to reset the database; fallbackToDestructiveMigration
-@Database(entities = arrayOf(Cost::class), version = 15)
+@Database(entities = arrayOf(Cost::class), version = 18)
 public abstract class CostRoomDatabase : RoomDatabase() {
 
     abstract fun costDao(): CostDao

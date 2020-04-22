@@ -16,10 +16,10 @@ interface CostDao {
     fun insertCost(cost: Cost)
 
     @Delete
-    fun deleteCost(cost: Cost)
+    fun deleteCost(cost:Cost)
 
     //
-    @Query("DELETE FROM listOfCosts")
-    fun deleteAll()
+//    @Query("DELETE FROM listOfCosts")
+//    fun deleteAll()
 //
 }

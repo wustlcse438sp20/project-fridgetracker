@@ -32,14 +32,17 @@ class CostViewModel(application: Application): AndroidViewModel(application) {
     }
 
 
-    fun delete(cost: Cost) {
+    fun deleteCost(cost: Cost) {
         repository.deleteCost(cost)
     }
+//    fun deleteAll() {
+//        repository.deleteCost()
+//    }
 
 
-    fun clear() {
-        repository.clear()
-    }
+//    fun clear() {
+//        repository.clear()
+//    }
 
 
 

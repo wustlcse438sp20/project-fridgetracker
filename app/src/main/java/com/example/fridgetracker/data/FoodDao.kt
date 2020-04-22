@@ -25,10 +25,10 @@ interface FoodDao {
     fun insertFood(food: Food)
 
     @Delete
-    fun deletePlayList(food: Food)
+    fun deleteAllFoods(food: Food)
 
-    @Query("DELETE FROM foodItems WHERE foodItems.id=:input")
-    fun deleteTrack(input:Int)
+    @Delete
+    fun deleteFoodItem(food:Food)
 //
     @Query("DELETE FROM foodItems")
     fun deleteAll()

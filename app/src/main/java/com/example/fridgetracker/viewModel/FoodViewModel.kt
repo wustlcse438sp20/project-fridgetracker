@@ -43,8 +43,7 @@ class FoodViewModel(application: Application): AndroidViewModel(application) {
         repository.insertFoodItem(food)
     }
 
-
-    fun delete(food: Food) {
+    fun deleteFoodItem(food:Food){
         repository.deleteFoodItem(food)
     }
 

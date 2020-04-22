@@ -25,11 +25,6 @@ import kotlinx.android.synthetic.main.fridge_tab.*
 //
 // taken from PlaylistFragment
 class FridgeFragment : Fragment() {
-    //lateinit var database: FirebaseFirestore
-    //private lateinit var auth: FirebaseAuth
-    //private var currentUser: String = ""
-    //lateinit var query: Query
-
     lateinit var adapter: FridgeAdapter
     private lateinit var viewModel: FoodViewModel
     private var foodItemList: ArrayList<Food> = ArrayList()
@@ -41,41 +36,6 @@ class FridgeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(FoodViewModel::class.java)
-        //auth = FirebaseAuth.getInstance()
-//        database = FirebaseFirestore.getInstance()
-//        currentUser = auth.currentUser?.email.toString()
-//
-//        val docRef = database.collection("users").document(currentUser)
-//        docRef.get()
-//            .addOnSuccessListener { document ->
-//                if (document != null) {
-//                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-//
-//
-//                } else {
-//                    Log.d(TAG, "No such document")
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d(TAG, "get failed with ", exception)
-//            }
-
-        //query = database.collection(currentUser)
-//        query =database.collection("users").document(currentUser).collection("foods")
-//        adapter = object : FridgeAdapter(query,this@FridgeFragment) {
-//            override fun onDataChanged() {
-//                // Show/hide content if the query returns empty.
-//                if (itemCount == 0) {
-//                    fridgeItemRecycler.visibility = View.GONE
-//                } else {
-//                    fridgeItemRecycler.visibility = View.VISIBLE
-//                    fridgeItemRecycler.layoutManager = LinearLayoutManager(getActivity())
-//                    fridgeItemRecycler.adapter = adapter
-//                }
-//            }
-//        }
-
-
     }
 
     override fun onStart() {
@@ -91,18 +51,10 @@ class FridgeFragment : Fragment() {
             // Update the cached copy of the words in the adapter.
             foodItemList.clear()
             foodItemList.addAll(foods)
+            foodItemList.sortBy { it.foodDate }
             adapter.notifyDataSetChanged()
             fridgeItemRecycler!!.adapter?.notifyDataSetChanged()
         })
-
-        // adapter stuff
-        //val testList = arrayListOf("testName")
-        //var adapter = FridgeAdapter()
-//        fridgeItemRecycler.adapter = adapter
-//        fridgeItemRecycler.layoutManager = LinearLayoutManager(this.context)
-//        fridgeItemRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        // viewmodel stuff here?
-        //adapter.startListening()
 
         addFridgeItemButton.setOnClickListener {
             dialogView()
@@ -115,11 +67,6 @@ class FridgeFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //id = arguments!!.getString("user","")
-//        println("fragment" + id)
-    }
 
     /**
      * Displays the dialog box asking the user for the item's info
@@ -144,9 +91,6 @@ class FridgeFragment : Fragment() {
             // If the string is empty, we do not want to accept that as an input
             if(foodName != "" && foodDate != "" && foodQuantity.toString() != "" && foodNote != ""){
                 //store food into user's food stuff
-//                val userFoods = database.collection(currentUser).document()
-//                userFoods.update("foods", FieldValue.arrayUnion(food))
-//                adapter.notifyDataSetChanged()
                 val food = Food("fridge",foodName,foodDate,foodQuantity,foodNote)
                 viewModel!!.insertFood(food)
                 mAlertDialog.dismiss()
@@ -156,13 +100,6 @@ class FridgeFragment : Fragment() {
             }
         }
     }
-
-//    companion object {
-//
-//        private val TAG = "FridgeFragment"
-//
-//
-//    }
 
 
 }

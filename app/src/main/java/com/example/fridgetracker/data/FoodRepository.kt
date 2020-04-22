@@ -20,7 +20,7 @@ class FoodRepository(private val foodDao: FoodDao) {
     //delete food item
     fun deleteFoodItem(food: Food) {
         CoroutineScope(Dispatchers.IO).launch {
-            foodDao.deletePlayList(food)
+            foodDao.deleteFoodItem(food)
         }
     }
 

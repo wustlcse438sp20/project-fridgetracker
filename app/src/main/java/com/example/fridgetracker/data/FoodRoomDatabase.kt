@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 // wah if I change the database of any kind, try changing the version number to reset the database; fallbackToDestructiveMigration
-@Database(entities = arrayOf(Food::class), version = 15)
+@Database(entities = arrayOf(Food::class), version = 18)
 //@TypeConverters(Converters::class)
 public abstract class FoodRoomDatabase : RoomDatabase() {
 

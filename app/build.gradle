@@ -70,6 +70,7 @@ dependencies {
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
     //dependency for viewModel coroutine
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0-beta01"
 
@@ -96,6 +97,8 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
 
     //cards
+
+
     //implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-database-ktx:19.2.1'

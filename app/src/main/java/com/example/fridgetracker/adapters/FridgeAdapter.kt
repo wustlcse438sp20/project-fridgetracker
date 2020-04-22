@@ -49,13 +49,23 @@ package com.example.fridgetracker.adapters
 //    }
 //}
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fridgetracker.R
+import com.example.fridgetracker.activities.MainActivity
 import com.example.fridgetracker.data.Food
+import com.example.fridgetracker.fragments.FridgeFragment
+import com.example.fridgetracker.viewModel.CostViewModel
+import com.example.fridgetracker.viewModel.FoodViewModel
 import kotlinx.android.synthetic.main.fridge_item.view.*
 
 // taken from PlaylistAdapter
@@ -64,6 +74,10 @@ class FridgeViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     private val itemName : TextView
     private val itemDate : TextView
     private val fridgeItem: LinearLayout
+    private val deleteButtonCostItem: Button
+
+    private lateinit var viewModel: FoodViewModel
+
 
     val context=parent.context
 
@@ -71,18 +85,19 @@ class FridgeViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         itemName = itemView.findViewById(R.id.fridgeItemName)
         itemDate = itemView.findViewById(R.id.fridgeItemDate)
         fridgeItem = itemView.findViewById(R.id.fridgeItem)
+        deleteButtonCostItem = itemView.findViewById(R.id.deleteButtonCostItem)
+
+        viewModel =
+            ViewModelProviders.of((context as FragmentActivity)!!).get(FoodViewModel::class.java)
     }
 
     fun bind(food: Food) {
 
         itemName.text = food.foodName
         itemDate.text = food.foodDate.toString()
-        //itemDate.text = playlist.playlistDesc
 
-        fridgeItem.setOnClickListener(){
-//            val intent= Intent(context, TracksOfPlaylist::class.java)
-//            intent.putExtra("playlistName", playlist.playlistName)
-//            context?.startActivity(intent)
+        deleteButtonCostItem.setOnClickListener(){
+            viewModel.deleteFoodItem(food)
         }
 
     }
@@ -106,5 +121,11 @@ class FridgeAdapter(private val list: ArrayList<Food>?)
 
     //set the count
     override fun getItemCount(): Int = list!!.size
+//    *@SuppressLint("NewApi")
+//     fun deleteItem(){
+//         list.removeIf{it.isChecked}
+//        notifyDataSetChanged()
+//         }
+//    }
 
 }

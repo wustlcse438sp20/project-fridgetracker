@@ -23,6 +23,11 @@ class CostRepository(private val costDao: CostDao) {
             costDao.deleteCost(cost)
         }
     }
+//    fun deleteAll() {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            costDao.deleteAll()
+//        }
+//    }
 
     // simply get all costs; this is unrelated to the SQL join
     fun getAllCosts() {
@@ -32,10 +37,10 @@ class CostRepository(private val costDao: CostDao) {
     }
 
 
-    fun clear() {
-        CoroutineScope(Dispatchers.IO).launch {
-            costDao.deleteAll()
-        }
-    }
+//    fun clear() {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            costDao.deleteAll()
+//        }
+//    }
 
 }

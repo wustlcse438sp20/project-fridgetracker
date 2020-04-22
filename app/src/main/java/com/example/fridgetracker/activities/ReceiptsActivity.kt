@@ -27,12 +27,16 @@ class ReceiptsActivity : AppCompatActivity() {
     private lateinit var viewModel: CostViewModel
     private var costItemList: ArrayList<Cost> = ArrayList()
 
+//    private var id: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.receipts_tab)
         viewModel = ViewModelProvider(this).get(CostViewModel::class.java)
 
+        val intent = intent
+//        id = intent!!.getIntExtra("costId",-1)
+        enableDelete()
     }
 
     override fun onStart() {
@@ -41,6 +45,10 @@ class ReceiptsActivity : AppCompatActivity() {
         receiptsRecycler.adapter = adapter
         receiptsRecycler.layoutManager = LinearLayoutManager(this)
         receiptsRecycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+//        if(id != -1) {
+//            viewModel!!.deleteCost(id)
+//        }
 
         viewModel!!.getAllCosts()
 
@@ -63,7 +71,9 @@ class ReceiptsActivity : AppCompatActivity() {
         }
     }
 
+    private fun enableDelete(){
 
+    }
 
     /**
      * Displays the dialog box asking the user for the item's info

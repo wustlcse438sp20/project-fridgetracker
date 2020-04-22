@@ -17,4 +17,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/receiptItemCost"
         android:layout_gravity="left" android:textSize="28sp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deleteButtonCostItem"
+        android:textSize="20sp"
+        android:text="delete"
+        android:layout_marginTop="0.5dp"
+        android:layout_marginRight="20dp"/>
+
 </LinearLayout>
