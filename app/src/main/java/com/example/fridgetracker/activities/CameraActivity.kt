@@ -1,43 +1,162 @@
 package com.example.fridgetracker.activities
 
-import com.example.fridgetracker.R
-
+//try 5
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.opensooq.supernova.gligar.GligarPicker
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.fridgetracker.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.face.FirebaseVisionFace
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.camera_test.*
+import java.io.ByteArrayOutputStream
+import java.time.LocalDateTime
+
 
 class CameraActivity : AppCompatActivity() {
+    val REQUEST_CAMERA_PERMISSIONS = 1;
+    val IMAGE_CAPTURE_CODE = 2;
+    private lateinit var auth: FirebaseAuth
+    lateinit var storage: FirebaseStorage
+    lateinit var storageRef : StorageReference
+//    val storageRef = storage.reference
 
-    val PICKER_REQUEST_CODE = 30
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //storage
+        storage = Firebase.storage
+        storageRef = storage.reference
+
+        //firebase auth
+        auth = FirebaseAuth.getInstance()
+
         setContentView(R.layout.camera_test)
-        GligarPicker().limit(10).disableCamera(false).cameraDirect(false).requestCode(PICKER_REQUEST_CODE)
-            .withActivity(this).show()
-    }
 
+        btnTakePicture.setOnClickListener {
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
+            var permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
 
-        when (requestCode) {
-            PICKER_REQUEST_CODE -> {
-                val imagesList = data?.extras?.getStringArray(GligarPicker.IMAGES_RESULT)
-                if (!imagesList.isNullOrEmpty()) {
-                    //imagesCount.text = "Number of selected Images: ${imagesList.size}"
-                }
+            if(permission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.CAMERA),REQUEST_CAMERA_PERMISSIONS)
+            } else {
+                val cIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(cIntent, IMAGE_CAPTURE_CODE)
             }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == IMAGE_CAPTURE_CODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                val bitmap = data!!.extras!!["data"] as Bitmap
+
+                val mountainsRef = storageRef.child(auth.currentUser.email.toString() + LocalDateTime.now().toString() + ".jpg")
+
+                val baos = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                val data = baos.toByteArray()
+
+                var uploadTask = mountainsRef.putBytes(data)
+                uploadTask.addOnFailureListener {
+                    // Handle unsuccessful uploads
+                }.addOnSuccessListener {
+                    // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                    // ...
+                }
+
+//                capturedImage.setImageBitmap(bitmap)
+//
+//                val fireImage = FirebaseVisionImage.fromBitmap(bitmap)
+//
+//                val options = FirebaseVisionFaceDetectorOptions.Builder()
+//                    .setPerformanceMode(FirebaseVisionFaceDetectorOptions.ACCURATE)
+//                    .setLandmarkMode(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+//                    .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+//                    .build()
+//
+//                val detector = FirebaseVision.getInstance().getVisionFaceDetector(options)
+//
+//                val result = detector.detectInImage(fireImage)
+//                    .addOnSuccessListener { faces ->
+//                        for(face in faces) {
+//                            if(face.smilingProbability != FirebaseVisionFace.UNCOMPUTED_PROBABILITY) {
+//                                val prob = face.smilingProbability
+//                                if(prob > .80) {
+//                                    smileText.text = "Smiling!"
+//                                } else {
+//                                    smileText.text = "=("
+//                                }
+//                            }
+//                        }
+//                    }
+            }
+        }
+    }
 }
+
+
+//import com.example.fridgetracker.R
+//
+//import android.app.Activity
+//import android.content.Intent
+//import android.os.Bundle
+//import androidx.appcompat.app.AppCompatActivity
+//import com.opensooq.supernova.gligar.GligarPicker
+//import kotlinx.android.synthetic.main.activity_main.*
+//
+//class CameraActivity : AppCompatActivity() {
+//
+//    val PICKER_REQUEST_CODE = 30
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.camera_test)
+//        GligarPicker().limit(10).disableCamera(false).cameraDirect(false).requestCode(PICKER_REQUEST_CODE)
+//            .withActivity(this).show()
+//    }
+//
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (resultCode != Activity.RESULT_OK) {
+//            return
+//        }
+//
+//        when (requestCode) {
+//            PICKER_REQUEST_CODE -> {
+//                val imagesList = data?.extras?.getStringArray(GligarPicker.IMAGES_RESULT)
+//                if (!imagesList.isNullOrEmpty()) {
+//                    //imagesCount.text = "Number of selected Images: ${imagesList.size}"
+//                }
+//            }
+//        }
+//    }
+//
+//}
 
 
 //import android.annotation.TargetApi

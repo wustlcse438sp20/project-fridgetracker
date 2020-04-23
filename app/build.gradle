@@ -89,6 +89,9 @@ dependencies {
     // Firestore
     implementation 'com.google.firebase:firebase-firestore:21.4.0'
 
+    //firebase storage
+    implementation 'com.google.firebase:firebase-storage-ktx:19.1.1'
+
     // Other Firebase/Play services deps
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
@@ -114,4 +117,11 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     implementation 'com.opensooq.supernova:gligar:1.0.0'
+
+    //camera stuff test 4 https://github.com/esafirm/android-image-picker
+//    implementation 'com.github.esafirm.android-image-picker:imagepicker:x.y.z'
+//    // for experimental rx picker
+//    implementation 'com.github.esafirm.android-image-picker:rximagepicker:x.y.z'
+//    // If you have a problem with Glide, please use the same Glide version or simply open an issue
+//    implementation 'com.github.bumptech.glide:glide:4.5.0'
 }
