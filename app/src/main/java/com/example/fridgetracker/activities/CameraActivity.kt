@@ -18,9 +18,18 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.fridgetracker.R
+import com.example.fridgetracker.adapters.CameraAdapter
+import com.example.fridgetracker.adapters.RecipeListAdapter
+import com.example.fridgetracker.data.User
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -31,6 +40,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.camera_test.*
+import kotlinx.android.synthetic.main.recipe_search_tab.*
 import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
 
@@ -43,6 +53,10 @@ class CameraActivity : AppCompatActivity() {
     lateinit var storageRef : StorageReference
 
     lateinit var database: FirebaseFirestore
+    private var urls : ArrayList<String> = arrayListOf()
+    lateinit var query: Query
+    lateinit var adapter: CameraAdapter
+
 
     private val TAG = "CameraActivity"
 
@@ -75,6 +89,56 @@ class CameraActivity : AppCompatActivity() {
                 startActivityForResult(cIntent, IMAGE_CAPTURE_CODE)
             }
         }
+
+        query = database.collection("users")
+        // initialize urls
+        var dbRef = database.collection("users").document(auth.currentUser!!.email.toString())
+        dbRef.get()
+            .addOnSuccessListener {document ->
+                if(document != null && document.contains("receiptsUrl")) {
+                    val user = document.toObject(User::class.java)
+                    urls = user!!.receiptsUrl
+//                    for(url in arrayOf(document.data!!.get("receiptsUrl"))) {
+//                        println("url: " + url.toString())
+//                        for(u in arrayOf(url)) {
+//                            urls.add(u.toString())
+//                        }
+//                    }
+//                    urls = arrayListOf(document.data!!.get("receiptsUrl").toString())
+                    println("inside urls initialization: " + urls)
+                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+//                                        var user = snapshot?.toObject(User::class.java)
+                    println("document.data: " + document.data.toString())
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+
+//            .orderBy("chips", Query.Direction.DESCENDING)
+//            .limit(50)
+//        adapter = object : CameraAdapter(query, this@CameraActivity) {
+//            override fun onDataChanged() {
+//                // Show/hide content if the query returns empty.
+//                if (itemCount == 0) {
+//                    cameraRecyclerView.visibility = View.GONE
+//                } else {
+//                    cameraRecyclerView.visibility = View.VISIBLE
+//                }
+//            }
+//
+//            override fun onError(e: FirebaseFirestoreException) {
+//                // Show a snackbar on errors
+//                Snackbar.make(findViewById(android.R.id.content),
+//                    "Error: check logs for info.", Snackbar.LENGTH_LONG).show()
+//            }
+//        }
+        adapter = CameraAdapter(urls)
+        cameraRecyclerView.layoutManager = GridLayoutManager(this,2)
+        cameraRecyclerView.adapter = adapter
+        cameraRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -87,13 +151,13 @@ class CameraActivity : AppCompatActivity() {
                 val mountainsRef = storageRef.child(auth.currentUser!!.email.toString() + LocalDateTime.now().toString() + ".jpg")
 
 
-                val user = hashMapOf(
-                    "image" to auth.currentUser!!.email.toString() + LocalDateTime.now().toString() + ".jpg"
-                )
-                database.collection("users").document(auth.currentUser!!.email.toString())
-                    .set(user)
-                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+//                val user = hashMapOf(
+//                    "image" to auth.currentUser!!.email.toString() + LocalDateTime.now().toString() + ".jpg"
+//                )
+//                database.collection("users").document(auth.currentUser!!.email.toString())
+//                    .set(user)
+//                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+//                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
                 val baos = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                 val data = baos.toByteArray()
@@ -103,7 +167,57 @@ class CameraActivity : AppCompatActivity() {
                     // Handle unsuccessful uploads
                 }.addOnSuccessListener {
                     // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-                    // ...
+                    // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                    // wah get url start
+//                    val ref = storageRef.child("images/mountains.jpg")
+                    //uploadTask = ref.putFile(file)
+
+                    val urlTask = uploadTask.continueWithTask { task ->
+                        if (!task.isSuccessful) {
+                            task.exception?.let {
+                                throw it
+                            }
+                        }
+                        println("ref.downloadUrl: " + mountainsRef.downloadUrl.toString())
+                        mountainsRef.downloadUrl
+                    }.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val downloadUri = task.result
+                            // save downloadUri into firestore
+                            urls.add(downloadUri.toString())
+                            adapter.notifyDataSetChanged()
+                            val user = hashMapOf(
+                                "receiptsUrl" to urls
+                            )
+                            var dbRef = database.collection("users").document(auth.currentUser!!.email.toString())
+                            dbRef
+                                .set(user)
+                                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+//                            dbRef
+//                                .update("receiptsUrl", FieldValue.arrayUnion(downloadUri.toString()))
+//                                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+//                                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+//                            dbRef.get()
+//                                .addOnSuccessListener {document ->
+//                                    if(document != null) {
+//                                        Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+////                                        var user = snapshot?.toObject(User::class.java)
+//                                        println("document.data: " + document.data.toString())
+//                                    } else {
+//                                        Log.d(TAG, "No such document")
+//                                    }
+//                                }
+//                                .addOnFailureListener { exception ->
+//                                    Log.d(TAG, "get failed with ", exception)
+//                                }
+                            println("downloadUri: " + downloadUri) // downloadUri is https:// url, which can be entered into chrome and shows the pic
+                        } else {
+                            // Handle failures
+                            println("urltask failure")
+                        }
+                    }
+                    // wah get url end
                 }
 
 //                capturedImage.setImageBitmap(bitmap)
