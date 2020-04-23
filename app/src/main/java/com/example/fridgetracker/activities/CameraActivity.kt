@@ -10,10 +10,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -22,25 +18,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.fridgetracker.R
 import com.example.fridgetracker.adapters.CameraAdapter
-import com.example.fridgetracker.adapters.RecipeListAdapter
-import com.example.fridgetracker.data.User
+import com.example.fridgetracker.data.ReceiptImage
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.face.FirebaseVisionFace
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.camera_test.*
-import kotlinx.android.synthetic.main.recipe_search_tab.*
 import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
 
@@ -90,35 +78,42 @@ class CameraActivity : AppCompatActivity() {
             }
         }
 
-        query = database.collection("users")
+        query = database.collection("users").document(auth.currentUser!!.email.toString()).collection("receipts")
         // initialize urls
-        var dbRef = database.collection("users").document(auth.currentUser!!.email.toString())
-        dbRef.get()
-            .addOnSuccessListener {document ->
-                if(document != null && document.contains("receiptsUrl")) {
-                    val user = document.toObject(User::class.java)
-                    urls = user!!.receiptsUrl
-//                    for(url in arrayOf(document.data!!.get("receiptsUrl"))) {
-//                        println("url: " + url.toString())
-//                        for(u in arrayOf(url)) {
-//                            urls.add(u.toString())
-//                        }
-//                    }
-//                    urls = arrayListOf(document.data!!.get("receiptsUrl").toString())
-                    println("inside urls initialization: " + urls)
-                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-//                                        var user = snapshot?.toObject(User::class.java)
-                    println("document.data: " + document.data.toString())
-                } else {
-                    Log.d(TAG, "No such document")
-                }
+        query.get().addOnSuccessListener { result ->
+            for (document in result) {
+                val receipt = document.toObject(ReceiptImage::class.java)
+                urls.add(receipt!!.url)
             }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
+            println("inside urls initialization: " + urls)
+        }
+//        var dbRef = database.collection("users").document(auth.currentUser!!.email.toString()).collection("receipts")
+//        dbRef
+//        dbRef.get()
+//            .addOnSuccessListener {document ->
+//                if(document != null && document.contains("receiptsUrl")) {
+//                    val receipt = document.toObject(ReceiptImage::class.java)
+//                    urls.add(receipt!!.url)
+////                    for(url in arrayOf(document.data!!.get("receiptsUrl"))) {
+////                        println("url: " + url.toString())
+////                        for(u in arrayOf(url)) {
+////                            urls.add(u.toString())
+////                        }
+////                    }
+////                    urls = arrayListOf(document.data!!.get("receiptsUrl").toString())
+//                    println("inside urls initialization: " + urls)
+//                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+////                                        var user = snapshot?.toObject(User::class.java)
+//                    println("document.data: " + document.data.toString())
+//                } else {
+//                    Log.d(TAG, "No such document")
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d(TAG, "get failed with ", exception)
+//            }
 
-//            .orderBy("chips", Query.Direction.DESCENDING)
-//            .limit(50)
+// firebase adapter
 //        adapter = object : CameraAdapter(query, this@CameraActivity) {
 //            override fun onDataChanged() {
 //                // Show/hide content if the query returns empty.
@@ -135,11 +130,15 @@ class CameraActivity : AppCompatActivity() {
 //                    "Error: check logs for info.", Snackbar.LENGTH_LONG).show()
 //            }
 //        }
+
+        // regular adapter
         adapter = CameraAdapter(urls)
-        cameraRecyclerView.layoutManager = GridLayoutManager(this,2)
+        adapter.notifyDataSetChanged()
+        cameraRecyclerView.layoutManager = GridLayoutManager(this,4)
         cameraRecyclerView.adapter = adapter
         cameraRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -183,15 +182,18 @@ class CameraActivity : AppCompatActivity() {
                     }.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val downloadUri = task.result
+                            val url = downloadUri.toString()
                             // save downloadUri into firestore
-                            urls.add(downloadUri.toString())
+                            urls.add(url)
+                            println("urls: " + urls)
                             adapter.notifyDataSetChanged()
-                            val user = hashMapOf(
-                                "receiptsUrl" to urls
+                            val image = hashMapOf(
+                                "url" to url
                             )
-                            var dbRef = database.collection("users").document(auth.currentUser!!.email.toString())
+                            var dbRef = database.collection("users").document(auth.currentUser!!.email.toString()).collection("receipts")
                             dbRef
-                                .set(user)
+//                                .set(user)
+                                .add(image)
                                 .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
                                 .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
 //                            dbRef

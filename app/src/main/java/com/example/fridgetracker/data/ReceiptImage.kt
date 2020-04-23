@@ -3,8 +3,8 @@ package com.example.fridgetracker.data
 import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
-data class User(
+data class ReceiptImage(
 //    var username: String? = "",
 //    var email: String? = "",
-    var receiptsUrl: ArrayList<String> = arrayListOf()
+    var url: String = ""
 )

@@ -1,21 +1,17 @@
 package com.example.fridgetracker.adapters
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import com.example.fridgetracker.R
 import com.example.fridgetracker.activities.CameraActivity
-import com.example.fridgetracker.activities.RecipeInfo
-import com.example.fridgetracker.data.User
+import com.example.fridgetracker.data.ReceiptImage
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.camera_recyclerview_item.view.*
-import android.widget.ImageView
-import android.widget.TextView
-import com.example.fridgetracker.R
-
 
 
 //define the binding for the view holder
@@ -86,23 +82,21 @@ class CameraAdapter(private val urls: ArrayList<String>)
 //            listener: CameraActivity
 //        ) {
 //
-//            val user = snapshot.toObject(User::class.java)
-//            if (user == null) {
+//            val receipt = snapshot.toObject(ReceiptImage::class.java)
+//            if (receipt == null) {
 //                return
 //            }
 //
 //            val resources = itemView.resources
 //
-//            for (url in user.receiptsUrl) {
-//
-//            }
-//            Picasso.get().load(recipe.strMealThumb).into(itemView.cameraItem)
+//            println("inside bind")
+//            Picasso.get().load(receipt.url).into(itemView.cameraItem)
 //            //onClickList on picture
-//            recipeImage.setOnClickListener{
-//                val intent= Intent(context, RecipeInfo::class.java)
-//                intent.putExtra("idMeal", Integer.parseInt(recipe.idMeal))
-//                intent.putExtra("comingFrom", "SearchRecipe")
-//                context.startActivity(intent)
+//            itemView.cameraItem.setOnClickListener{
+////                val intent= Intent(context, RecipeInfo::class.java)
+////                intent.putExtra("idMeal", Integer.parseInt(recipe.idMeal))
+////                intent.putExtra("comingFrom", "SearchRecipe")
+////                context.startActivity(intent)
 //            }
 //
 ////            itemView.idUser.text = Integer.toString(position + 1)
