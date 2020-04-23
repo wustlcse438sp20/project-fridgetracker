@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -19,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.fridgetracker.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -39,6 +41,11 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     lateinit var storage: FirebaseStorage
     lateinit var storageRef : StorageReference
+
+    lateinit var database: FirebaseFirestore
+
+    private val TAG = "CameraActivity"
+
 //    val storageRef = storage.reference
 
 
@@ -47,6 +54,9 @@ class CameraActivity : AppCompatActivity() {
         //storage
         storage = Firebase.storage
         storageRef = storage.reference
+
+        //database
+        database = FirebaseFirestore.getInstance()
 
         //firebase auth
         auth = FirebaseAuth.getInstance()
@@ -74,8 +84,16 @@ class CameraActivity : AppCompatActivity() {
             if(resultCode == Activity.RESULT_OK) {
                 val bitmap = data!!.extras!!["data"] as Bitmap
 
-                val mountainsRef = storageRef.child(auth.currentUser.email.toString() + LocalDateTime.now().toString() + ".jpg")
+                val mountainsRef = storageRef.child(auth.currentUser!!.email.toString() + LocalDateTime.now().toString() + ".jpg")
 
+
+                val user = hashMapOf(
+                    "image" to auth.currentUser!!.email.toString() + LocalDateTime.now().toString() + ".jpg"
+                )
+                database.collection("users").document(auth.currentUser!!.email.toString())
+                    .set(user)
+                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
                 val baos = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                 val data = baos.toByteArray()
