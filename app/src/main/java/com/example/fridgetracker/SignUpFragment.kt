@@ -77,17 +77,18 @@ class SignUpFragment() : Fragment() {
                                     }
                                 }
 
-//                            //add user to database
-//                            val user = hashMapOf(
-//                                "username" to username.text.toString(),
-//                                "email" to email.text.toString(),
-//                                "password" to password.text.toString()
-//                            )
+                            //add user to database
+                            val receiptsUrl = arrayListOf<String>()
+                            val user = hashMapOf(
+                                "email" to email.text.toString(),
+//                                "password" to password.text.toString(),
+                                "receiptsUrl" to receiptsUrl
+                            )
 //                            //println(user)
-//                            database.collection("users")
-//                                .add(user)
-//                                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-//                                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+                            database.collection("users")
+                                .add(user)
+                                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)

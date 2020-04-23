@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -18,7 +19,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.fridgetracker.R
+import com.example.fridgetracker.data.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -37,8 +41,10 @@ class CameraActivity : AppCompatActivity() {
     val REQUEST_CAMERA_PERMISSIONS = 1;
     val IMAGE_CAPTURE_CODE = 2;
     private lateinit var auth: FirebaseAuth
+    lateinit var database: FirebaseFirestore
     lateinit var storage: FirebaseStorage
     lateinit var storageRef : StorageReference
+    private var urls : ArrayList<String> = arrayListOf()
 //    val storageRef = storage.reference
 
 
@@ -50,6 +56,29 @@ class CameraActivity : AppCompatActivity() {
 
         //firebase auth
         auth = FirebaseAuth.getInstance()
+
+        // firestore
+        database = FirebaseFirestore.getInstance()
+        val docRef = database.collection("users").document(auth.currentUser!!.email.toString())
+        println("hi"+docRef)
+        docRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                Log.d(TAG, "Current data: ${snapshot.data}")
+                var user = snapshot?.toObject(User::class.java)
+                println("user: " + user)
+//                playersChips = user!!.chips!!
+//                chips.text = "Chips: " + playersChips
+            } else {
+                Log.d(TAG, "Current data: null")
+            }
+        }
+
+
 
         setContentView(R.layout.camera_test)
 
@@ -73,8 +102,8 @@ class CameraActivity : AppCompatActivity() {
         if(requestCode == IMAGE_CAPTURE_CODE) {
             if(resultCode == Activity.RESULT_OK) {
                 val bitmap = data!!.extras!!["data"] as Bitmap
-
-                val mountainsRef = storageRef.child(auth.currentUser.email.toString() + LocalDateTime.now().toString() + ".jpg")
+//wah, added !! to currentUser
+                val mountainsRef = storageRef.child(auth.currentUser!!.email.toString() + LocalDateTime.now().toString() + ".jpg")
 
                 val baos = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -85,7 +114,49 @@ class CameraActivity : AppCompatActivity() {
                     // Handle unsuccessful uploads
                 }.addOnSuccessListener {
                     // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-                    // ...
+                    // wah get url start
+//                    val ref = storageRef.child("images/mountains.jpg")
+                    //uploadTask = ref.putFile(file)
+
+                    val urlTask = uploadTask.continueWithTask { task ->
+                        if (!task.isSuccessful) {
+                            task.exception?.let {
+                                throw it
+                            }
+                        }
+                        println("ref.downloadUrl: " + mountainsRef.downloadUrl.toString())
+                        mountainsRef.downloadUrl
+                    }.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val downloadUri = task.result
+                            // save downloadUri into firestore
+                            urls.add(downloadUri.toString())
+                            var dbRef = database.collection("users").document(auth.currentUser!!.email.toString())
+                            dbRef
+                                .update("receiptsUrl", FieldValue.arrayUnion(downloadUri.toString()))
+                                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+
+                            dbRef.get()
+                                .addOnSuccessListener {document ->
+                                    if(document != null) {
+                                        Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+//                                        var user = snapshot?.toObject(User::class.java)
+                                        println("document.data: " + document.data.toString())
+                                    } else {
+                                        Log.d(TAG, "No such document")
+                                    }
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.d(TAG, "get failed with ", exception)
+                                }
+                            println("downloadUri: " + downloadUri) // downloadUri is https:// url, which can be entered into chrome and shows the pic
+                        } else {
+                            // Handle failures
+                            println("urltask failure")
+                        }
+                    }
+                    // wah get url end
                 }
 
 //                capturedImage.setImageBitmap(bitmap)
@@ -115,6 +186,12 @@ class CameraActivity : AppCompatActivity() {
 //                    }
             }
         }
+    }
+
+    companion object {
+
+        private const val TAG = "CameraActivity"
+
     }
 }
 
