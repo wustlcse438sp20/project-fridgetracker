@@ -63,6 +63,7 @@ class CameraActivity : AppCompatActivity() {
 //    val storageRef = storage.reference
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //storage
@@ -92,35 +93,31 @@ class CameraActivity : AppCompatActivity() {
 
         query = database.collection("users")
         // initialize urls
-        database.collection("users").document(auth.currentUser!!.email.toString())
-            .update("image", FieldValue.arrayUnion(auth.currentUser!!.email.toString() + LocalDateTime.now().toString() + ".jpg"))
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-        //old stuff
-//        var dbRef = database.collection("users").document(auth.currentUser!!.email.toString())
-//        dbRef.get()
-//            .addOnSuccessListener {document ->
-//                if(document != null && document.contains("receiptsUrl")) {
-//                    val user = document.toObject(User::class.java)
-//                    urls = user!!.receiptsUrl
-////                    for(url in arrayOf(document.data!!.get("receiptsUrl"))) {
-////                        println("url: " + url.toString())
-////                        for(u in arrayOf(url)) {
-////                            urls.add(u.toString())
-////                        }
-////                    }
-////                    urls = arrayListOf(document.data!!.get("receiptsUrl").toString())
-//                    println("inside urls initialization: " + urls)
-//                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-////                                        var user = snapshot?.toObject(User::class.java)
-//                    println("document.data: " + document.data.toString())
-//                } else {
-//                    Log.d(TAG, "No such document")
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d(TAG, "get failed with ", exception)
-//            }
+
+        var dbRef = database.collection("users").document(auth.currentUser!!.email.toString())
+        dbRef.get()
+            .addOnSuccessListener {document ->
+                if(document != null && document.contains("receiptsUrl")) {
+                    val user = document.toObject(User::class.java)
+                    urls = user!!.receiptsUrl
+//                    for(url in arrayOf(document.data!!.get("receiptsUrl"))) {
+//                        println("url: " + url.toString())
+//                        for(u in arrayOf(url)) {
+//                            urls.add(u.toString())
+//                        }
+//                    }
+//                    urls = arrayListOf(document.data!!.get("receiptsUrl").toString())
+                    println("inside urls initialization: " + urls)
+                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+//                                        var user = snapshot?.toObject(User::class.java)
+                    println("document.data: " + document.data.toString())
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
 //
 //            .orderBy("chips", Query.Direction.DESCENDING)
 //            .limit(50)
@@ -163,6 +160,13 @@ class CameraActivity : AppCompatActivity() {
 //                    .set(user)
 //                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
 //                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
+                //store urls into firebase database
+                database.collection("users").document(auth.currentUser!!.email.toString())
+                    .update("image", FieldValue.arrayUnion(auth.currentUser!!.email.toString() + LocalDateTime.now().toString() + ".jpg"))
+                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
                 val baos = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                 val data = baos.toByteArray()
