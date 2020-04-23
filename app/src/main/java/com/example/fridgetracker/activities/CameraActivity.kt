@@ -92,31 +92,36 @@ class CameraActivity : AppCompatActivity() {
 
         query = database.collection("users")
         // initialize urls
-        var dbRef = database.collection("users").document(auth.currentUser!!.email.toString())
-        dbRef.get()
-            .addOnSuccessListener {document ->
-                if(document != null && document.contains("receiptsUrl")) {
-                    val user = document.toObject(User::class.java)
-                    urls = user!!.receiptsUrl
-//                    for(url in arrayOf(document.data!!.get("receiptsUrl"))) {
-//                        println("url: " + url.toString())
-//                        for(u in arrayOf(url)) {
-//                            urls.add(u.toString())
-//                        }
-//                    }
-//                    urls = arrayListOf(document.data!!.get("receiptsUrl").toString())
-                    println("inside urls initialization: " + urls)
-                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-//                                        var user = snapshot?.toObject(User::class.java)
-                    println("document.data: " + document.data.toString())
-                } else {
-                    Log.d(TAG, "No such document")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
-
+        database.collection("users").document(auth.currentUser!!.email.toString())
+            .update("image", FieldValue.arrayUnion(auth.currentUser!!.email.toString() + LocalDateTime.now().toString() + ".jpg"))
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+        //old stuff
+//        var dbRef = database.collection("users").document(auth.currentUser!!.email.toString())
+//        dbRef.get()
+//            .addOnSuccessListener {document ->
+//                if(document != null && document.contains("receiptsUrl")) {
+//                    val user = document.toObject(User::class.java)
+//                    urls = user!!.receiptsUrl
+////                    for(url in arrayOf(document.data!!.get("receiptsUrl"))) {
+////                        println("url: " + url.toString())
+////                        for(u in arrayOf(url)) {
+////                            urls.add(u.toString())
+////                        }
+////                    }
+////                    urls = arrayListOf(document.data!!.get("receiptsUrl").toString())
+//                    println("inside urls initialization: " + urls)
+//                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+////                                        var user = snapshot?.toObject(User::class.java)
+//                    println("document.data: " + document.data.toString())
+//                } else {
+//                    Log.d(TAG, "No such document")
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d(TAG, "get failed with ", exception)
+//            }
+//
 //            .orderBy("chips", Query.Direction.DESCENDING)
 //            .limit(50)
 //        adapter = object : CameraAdapter(query, this@CameraActivity) {
