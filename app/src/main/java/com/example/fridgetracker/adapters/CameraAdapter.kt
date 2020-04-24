@@ -26,7 +26,7 @@ class CameraViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     //take id of track and send to new activity for track
     fun bind(url: String) {
         //Display album cover
-        Picasso.get().load(url).into(cameraItem)
+        Picasso.get().load(url).resize(600,1000).into(cameraItem)
         //onClickList on picture
         cameraItem.setOnClickListener{
 //            val intent= Intent(context, RecipeInfo::class.java)

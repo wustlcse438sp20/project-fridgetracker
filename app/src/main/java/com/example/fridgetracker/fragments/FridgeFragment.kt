@@ -101,23 +101,24 @@ class FridgeFragment : Fragment() {
             val foodQuantity = dialogView.foodQuantityEntered.text.toString().toInt()
             val foodNote = dialogView.foodNoteEntered.text.toString()
 
-            val dateTimeFormatter =
-                DateTimeFormatter
-                    .ofPattern("MM/dd/yyyy", Locale.US)
-                    .withResolverStyle(ResolverStyle.STRICT)
-            try {
-                val date: LocalDateTime = LocalDateTime.parse(foodDate, dateTimeFormatter)
-                System.out.println(date)
-            } catch (e: DateTimeParseException) {
-                // Throw invalid date message
-                println("Exception was thrown")
-                val myToast = Toast.makeText(this.getActivity(), "Please enter date with valid format", Toast.LENGTH_SHORT)
-                myToast.show()
-            }
+
             //store food into Food
             // If the string is empty, we do not want to accept that as an input
             if(foodName != "" && foodDate != "" && foodQuantity.toString() != "" && foodNote != "" ){
                 //store food into user's food stuff
+                val dateTimeFormatter =
+                    DateTimeFormatter
+                        .ofPattern("MM/dd/yyyy", Locale.US)
+                        .withResolverStyle(ResolverStyle.STRICT)
+                try {
+                    val date: LocalDateTime = LocalDateTime.parse(foodDate, dateTimeFormatter)
+                    System.out.println(date)
+                } catch (e: DateTimeParseException) {
+                    // Throw invalid date message
+                    println("Exception was thrown")
+                    val myToast = Toast.makeText(this.getActivity(), "Please enter date with valid format", Toast.LENGTH_SHORT)
+                    myToast.show()
+                }
 
                 val food = Food("fridge",foodName,foodDate,foodQuantity,foodNote)
                 viewModel!!.insertFood(food)

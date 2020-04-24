@@ -138,6 +138,13 @@ class CameraActivity : AppCompatActivity() {
         cameraRecyclerView.layoutManager = GridLayoutManager(this,4)
         cameraRecyclerView.adapter = adapter
         cameraRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+        //actually menu button
+        btnGallery.setOnClickListener {
+            var main = Intent(this, MenuActivity::class.java)
+            //main.putExtra("id", 1)
+            startActivity(main)
+        }
     }
 
 
