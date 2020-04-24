@@ -20,6 +20,8 @@ import com.example.fridgetracker.viewModel.FoodViewModel
 import kotlinx.android.synthetic.main.enter_food_information.*
 import kotlinx.android.synthetic.main.enter_food_information.view.*
 import kotlinx.android.synthetic.main.pantry_tab.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 //
@@ -42,6 +44,8 @@ class PantryFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+
         var adapter = FridgeAdapter(foodItemList)
         fridgeItemRecycler.adapter = adapter
         fridgeItemRecycler.layoutManager = LinearLayoutManager(activity)
@@ -53,6 +57,8 @@ class PantryFragment : Fragment() {
             // Update the cached copy of the words in the adapter.
             foodItemList.clear()
             foodItemList.addAll(playlists)
+            foodItemList.sortBy { LocalDate.parse(it.foodDate, dateTimeFormatter) }
+
             adapter.notifyDataSetChanged()
             fridgeItemRecycler!!.adapter?.notifyDataSetChanged()
         })

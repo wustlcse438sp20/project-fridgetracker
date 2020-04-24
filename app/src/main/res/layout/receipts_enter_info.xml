@@ -8,7 +8,7 @@
 
     <EditText
         android:id="@+id/dateOfPurchase"
-        android:hint="Date of Purchase"
+        android:hint="Date of Purchase: MM/DD/YY"
         android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

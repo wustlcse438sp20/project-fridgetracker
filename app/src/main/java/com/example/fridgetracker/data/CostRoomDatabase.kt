@@ -27,7 +27,7 @@ public abstract class CostRoomDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     CostRoomDatabase::class.java,
-                    "playlist_database"
+                    "Cost_database"
                 ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance

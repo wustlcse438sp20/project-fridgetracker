@@ -21,7 +21,7 @@
 <!--        android:calendarViewShown="false"/>-->
         <EditText
         android:id="@+id/foodDateEntered"
-        android:hint="Expiration Date"
+        android:hint="Expiration Date: MM/DD/YY"
         android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
