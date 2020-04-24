@@ -2,12 +2,14 @@ package com.example.fridgetracker.fragments
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,8 @@ import com.example.fridgetracker.viewModel.FoodViewModel
 import kotlinx.android.synthetic.main.enter_food_information.*
 import kotlinx.android.synthetic.main.enter_food_information.view.*
 import kotlinx.android.synthetic.main.pantry_tab.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 //
@@ -40,8 +44,11 @@ class PantryFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart()
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+
         var adapter = FridgeAdapter(foodItemList)
         fridgeItemRecycler.adapter = adapter
         fridgeItemRecycler.layoutManager = LinearLayoutManager(activity)
@@ -53,6 +60,8 @@ class PantryFragment : Fragment() {
             // Update the cached copy of the words in the adapter.
             foodItemList.clear()
             foodItemList.addAll(playlists)
+            foodItemList.sortBy { LocalDate.parse(it.foodDate, dateTimeFormatter) }
+
             adapter.notifyDataSetChanged()
             fridgeItemRecycler!!.adapter?.notifyDataSetChanged()
         })
@@ -90,14 +99,20 @@ class PantryFragment : Fragment() {
         // Sets an onclick listener on the dialog box button
         mAlertDialog.addFoodButton.setOnClickListener {
             val foodName = dialogView.foodNameEntered.text.toString()
-            val foodDate = dialogView.foodDateEntered.text.toString()
-            val foodQuantity = dialogView.foodQuantityEntered.text.toString().toInt()
+            val month = dialogView.month.text.toString()
+            val date = dialogView.date.text.toString()
+            val year = dialogView.year.text.toString()
+            val foodDate = month + "/" + date + "/" + year
+            val foodQuantity = dialogView.foodQuantityEntered.text.toString()
             val foodNote = dialogView.foodNoteEntered.text.toString()
 
             //store food into Food
             // If the string is empty, we do not want to accept that as an input
-            if(foodName != "" && foodDate.toString() != "" && foodQuantity.toString() != "" && foodNote != ""){
-                val food = Food("pantry",foodName,foodDate,foodQuantity,foodNote)
+            if(foodName != "" && foodDate != "" && foodQuantity != "" && foodNote != ""
+                && foodDate.length == 10
+                && month.toIntOrNull() != null && date.toIntOrNull() != null && year.toIntOrNull() != null
+                && month.toInt() <= 12  && date.toInt() <= 31){
+                val food = Food("pantry",foodName,foodDate,foodQuantity.toInt(),foodNote)
                 viewModel!!.insertFood(food)
                 mAlertDialog.dismiss()
             } else {

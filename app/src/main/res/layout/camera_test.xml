@@ -20,21 +20,19 @@
         android:id="@+id/btnGallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go To Gallery"
+        android:text="Menu"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <ImageView
-        android:id="@+id/capturedImage"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cameraRecyclerView"
         android:layout_width="402dp"
-        android:layout_height="450dp"
-        android:layout_marginBottom="40dp"
+        android:layout_height="500dp"
         app:layout_constraintBottom_toTopOf="@+id/btnTakePicture"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/smileText" />
+        app:layout_constraintTop_toBottomOf="@+id/smileText"/>
 
     <TextView
         android:id="@+id/smileText"
@@ -44,7 +42,7 @@
         android:layout_marginBottom="10dp"
         android:text="Camera"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/capturedImage"
+        app:layout_constraintBottom_toTopOf="@+id/cameraRecyclerView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

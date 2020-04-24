@@ -97,29 +97,36 @@ class FridgeFragment : Fragment() {
         // Sets an onclick listener on the dialog box button
         mAlertDialog.addFoodButton.setOnClickListener {
             val foodName = dialogView.foodNameEntered.text.toString()
-            val foodDate = dialogView.foodDateEntered.text.toString()
-            val foodQuantity = dialogView.foodQuantityEntered.text.toString().toInt()
+            val month = dialogView.month.text.toString()
+            val date = dialogView.date.text.toString()
+            val year = dialogView.year.text.toString()
+            val foodDate = month + "/" + date + "/" + year
+            val foodQuantity = dialogView.foodQuantityEntered.text.toString()
             val foodNote = dialogView.foodNoteEntered.text.toString()
 
-            val dateTimeFormatter =
-                DateTimeFormatter
-                    .ofPattern("MM/dd/yyyy", Locale.US)
-                    .withResolverStyle(ResolverStyle.STRICT)
-            try {
-                val date: LocalDateTime = LocalDateTime.parse(foodDate, dateTimeFormatter)
-                System.out.println(date)
-            } catch (e: DateTimeParseException) {
-                // Throw invalid date message
-                println("Exception was thrown")
-                val myToast = Toast.makeText(this.getActivity(), "Please enter date with valid format", Toast.LENGTH_SHORT)
-                myToast.show()
-            }
+
             //store food into Food
             // If the string is empty, we do not want to accept that as an input
-            if(foodName != "" && foodDate != "" && foodQuantity.toString() != "" && foodNote != "" ){
+            if(foodName != "" && foodDate != "" && foodQuantity != "" && foodNote != ""
+                && foodDate.length == 10
+                && month.toIntOrNull() != null && date.toIntOrNull() != null && year.toIntOrNull() != null
+                && month.toInt() <= 12  && date.toInt() <= 31){
                 //store food into user's food stuff
+//                val dateTimeFormatter =
+//                    DateTimeFormatter
+//                        .ofPattern("MM/dd/yyyy", Locale.US)
+//                        .withResolverStyle(ResolverStyle.STRICT)
+//                try {
+//                    val date: LocalDateTime = LocalDateTime.parse(foodDate, dateTimeFormatter)
+//                    System.out.println(date)
+//                } catch (e: DateTimeParseException) {
+//                    // Throw invalid date message
+//                    println("Exception was thrown")
+//                    val myToast = Toast.makeText(this.getActivity(), "Please enter date with valid format", Toast.LENGTH_SHORT)
+//                    myToast.show()
+//                }
 
-                val food = Food("fridge",foodName,foodDate,foodQuantity,foodNote)
+                val food = Food("fridge",foodName,foodDate,foodQuantity.toInt(),foodNote)
                 viewModel!!.insertFood(food)
                 mAlertDialog.dismiss()
             } else {

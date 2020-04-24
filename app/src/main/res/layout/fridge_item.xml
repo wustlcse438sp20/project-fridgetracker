@@ -14,14 +14,17 @@
         android:layout_width="0dp"
         android:layout_weight=".4"
         android:layout_height="wrap_content"
-        android:id="@+id/fridgeItemName" android:textSize="28sp"/>
+        android:id="@+id/fridgeItemName" android:textSize="20sp"/>
+
     <TextView
-        android:text="0"
-        android:layout_width="0dp"
-        android:layout_weight=".5"
-        android:layout_height="wrap_content"
         android:id="@+id/fridgeItemDate"
-        android:layout_gravity="left" android:textSize="28sp"/>
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_weight=".5"
+        android:text="0"
+        android:textSize="20sp" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
