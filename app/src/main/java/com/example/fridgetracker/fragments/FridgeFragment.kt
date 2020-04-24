@@ -97,14 +97,20 @@ class FridgeFragment : Fragment() {
         // Sets an onclick listener on the dialog box button
         mAlertDialog.addFoodButton.setOnClickListener {
             val foodName = dialogView.foodNameEntered.text.toString()
-            val foodDate = dialogView.foodDateEntered.text.toString()
+            val month = dialogView.month.text.toString()
+            val date = dialogView.date.text.toString()
+            val year = dialogView.year.text.toString()
+            val foodDate = month + "/" + date + "/" + year
             val foodQuantity = dialogView.foodQuantityEntered.text.toString()
             val foodNote = dialogView.foodNoteEntered.text.toString()
 
 
             //store food into Food
             // If the string is empty, we do not want to accept that as an input
-            if(foodName != "" && foodDate != "" && foodQuantity.toString() != "" && foodNote != "" ){
+            if(foodName != "" && foodDate != "" && foodQuantity != "" && foodNote != ""
+                && foodDate.length == 10
+                && month.toIntOrNull() != null && date.toIntOrNull() != null && year.toIntOrNull() != null
+                && month.toInt() <= 12  && date.toInt() <= 31){
                 //store food into user's food stuff
 //                val dateTimeFormatter =
 //                    DateTimeFormatter

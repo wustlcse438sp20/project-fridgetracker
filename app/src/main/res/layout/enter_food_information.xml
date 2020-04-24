@@ -13,19 +13,56 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-<!--    <DatePicker-->
-<!--        android:id="@+id/foodDateEntered"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:datePickerMode="spinner"-->
-<!--        android:calendarViewShown="false"/>-->
-        <EditText
-        android:id="@+id/foodDateEntered"
-        android:hint="Expiration Date: MM/DD/YY"
-        android:inputType="text"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expiration Date    "
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/month"
+            android:hint="MM"
+            android:inputType="number"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textSize="18sp"/>
+        <EditText
+            android:id="@+id/date"
+            android:hint="DD"
+            android:inputType="number"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textSize="18sp"/>
+        <EditText
+            android:id="@+id/year"
+            android:hint="YYYY"
+            android:inputType="number"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+    <!--    <DatePicker-->
+    <!--        android:id="@+id/foodDateEntered"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:datePickerMode="spinner"-->
+    <!--        android:calendarViewShown="false"/>-->
+
     <EditText
         android:id="@+id/foodQuantityEntered"
         android:hint="Quantity"

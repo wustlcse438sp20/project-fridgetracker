@@ -2,12 +2,14 @@ package com.example.fridgetracker.fragments
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,6 +44,7 @@ class PantryFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart()
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
@@ -96,13 +99,19 @@ class PantryFragment : Fragment() {
         // Sets an onclick listener on the dialog box button
         mAlertDialog.addFoodButton.setOnClickListener {
             val foodName = dialogView.foodNameEntered.text.toString()
-            val foodDate = dialogView.foodDateEntered.text.toString()
+            val month = dialogView.month.text.toString()
+            val date = dialogView.date.text.toString()
+            val year = dialogView.year.text.toString()
+            val foodDate = month + "/" + date + "/" + year
             val foodQuantity = dialogView.foodQuantityEntered.text.toString()
             val foodNote = dialogView.foodNoteEntered.text.toString()
 
             //store food into Food
             // If the string is empty, we do not want to accept that as an input
-            if(foodName != "" && foodDate.toString() != "" && foodQuantity.toString() != "" && foodNote != ""){
+            if(foodName != "" && foodDate != "" && foodQuantity != "" && foodNote != ""
+                && foodDate.length == 10
+                && month.toIntOrNull() != null && date.toIntOrNull() != null && year.toIntOrNull() != null
+                && month.toInt() <= 12  && date.toInt() <= 31){
                 val food = Food("pantry",foodName,foodDate,foodQuantity.toInt(),foodNote)
                 viewModel!!.insertFood(food)
                 mAlertDialog.dismiss()
