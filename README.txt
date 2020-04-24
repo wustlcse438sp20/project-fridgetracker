@@ -1,5 +1,5 @@
-App Name:
-Team Members:
+App Name: Fridge Tracker
+Team Members: Amy Kim, Kate Matsunaga
 
 In this file you should include:
 
