@@ -98,7 +98,7 @@ class FridgeFragment : Fragment() {
         mAlertDialog.addFoodButton.setOnClickListener {
             val foodName = dialogView.foodNameEntered.text.toString()
             val foodDate = dialogView.foodDateEntered.text.toString()
-            val foodQuantity = dialogView.foodQuantityEntered.text.toString().toInt()
+            val foodQuantity = dialogView.foodQuantityEntered.text.toString()
             val foodNote = dialogView.foodNoteEntered.text.toString()
 
 
@@ -120,7 +120,7 @@ class FridgeFragment : Fragment() {
 //                    myToast.show()
 //                }
 
-                val food = Food("fridge",foodName,foodDate,foodQuantity,foodNote)
+                val food = Food("fridge",foodName,foodDate,foodQuantity.toInt(),foodNote)
                 viewModel!!.insertFood(food)
                 mAlertDialog.dismiss()
             } else {
