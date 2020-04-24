@@ -86,6 +86,8 @@ class CameraActivity : AppCompatActivity() {
                 urls.add(receipt!!.url)
             }
             println("inside urls initialization: " + urls)
+            adapter.notifyDataSetChanged()
+
         }
 //        var dbRef = database.collection("users").document(auth.currentUser!!.email.toString()).collection("receipts")
 //        dbRef
@@ -133,7 +135,6 @@ class CameraActivity : AppCompatActivity() {
 
         // regular adapter
         adapter = CameraAdapter(urls)
-        adapter.notifyDataSetChanged()
         cameraRecyclerView.layoutManager = GridLayoutManager(this,4)
         cameraRecyclerView.adapter = adapter
         cameraRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
