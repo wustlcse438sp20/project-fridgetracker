@@ -28,18 +28,9 @@ data class SavedRecipe(
     val strMeal: String,
     @ColumnInfo(name = "strInstructions")
     val strInstructions: String
-//    @ColumnInfo(name = "foodQuantity")
-//    val foodQuantity: Int,
-//    @ColumnInfo(name = "foodNote")
-//    val foodNote: String
 )
 {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 }
 
-// this class may not be necessary
-data class RecipeImage(
-    val strMealThumb: String, // url
-    val strMeal: String // name of recipe
-) : Serializable

@@ -29,10 +29,6 @@ class CameraViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         Picasso.get().load(url).resize(600,1000).into(cameraItem)
         //onClickList on picture
         cameraItem.setOnClickListener{
-//            val intent= Intent(context, RecipeInfo::class.java)
-//            intent.putExtra("idMeal", Integer.parseInt(recipe.idMeal))
-//            intent.putExtra("comingFrom", "SearchRecipe")
-//            context.startActivity(intent)
         }
 
     }
@@ -58,49 +54,3 @@ class CameraAdapter(private val urls: ArrayList<String>)
 
 }
 
-//open class CameraAdapter(query: Query, private val listener: CameraActivity) :
-//    FirestoreAdapter<CameraAdapter.ViewHolder>(query) {
-//
-//    interface OnRestaurantSelectedListener {
-//
-//        fun onRestaurantSelected(restaurant: DocumentSnapshot)
-//    }
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//        val inflater = LayoutInflater.from(parent.context)
-//        return ViewHolder(inflater.inflate(R.layout.camera_recyclerview_item, parent, false))
-//    }
-//
-//    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.bind(getSnapshot(position), listener)
-//    }
-//
-//    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//
-//        fun bind(
-//            snapshot: DocumentSnapshot,
-//            listener: CameraActivity
-//        ) {
-//
-//            val receipt = snapshot.toObject(ReceiptImage::class.java)
-//            if (receipt == null) {
-//                return
-//            }
-//
-//            val resources = itemView.resources
-//
-//            println("inside bind")
-//            Picasso.get().load(receipt.url).into(itemView.cameraItem)
-//            //onClickList on picture
-//            itemView.cameraItem.setOnClickListener{
-////                val intent= Intent(context, RecipeInfo::class.java)
-////                intent.putExtra("idMeal", Integer.parseInt(recipe.idMeal))
-////                intent.putExtra("comingFrom", "SearchRecipe")
-////                context.startActivity(intent)
-//            }
-//
-////            itemView.idUser.text = Integer.toString(position + 1)
-////            itemView.userScore.text = user.username +" with "+ user.chips.toString() + " chips"
-//        }
-//    }
-//}

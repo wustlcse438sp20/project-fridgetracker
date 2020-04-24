@@ -14,8 +14,6 @@ import kotlinx.android.synthetic.main.content_tabs_holder.*
 
 class InventoryActivity : AppCompatActivity() {
     private var id:String = ""
-//    lateinit var viewModel: MusicViewModel
-//    var musicList: ArrayList<Music> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,19 +29,6 @@ class InventoryActivity : AppCompatActivity() {
     }
     override fun onStart() {
         super.onStart()
-        //id = intent.getStringExtra("id")
-        //println(id)
-
-//        val fragment = FridgeFragment()
-//
-//        //pass array of rolls to the fragments
-//        var bundle = Bundle()
-//        bundle.putString("user", id)
-//        fragment.arguments = bundle
-
-//        val transaction = supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.frag_container, fragment)
-//        transaction.commit()
     }
 
     class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
